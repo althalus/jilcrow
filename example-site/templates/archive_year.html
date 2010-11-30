@@ -1,27 +1,32 @@
 {% extends "base.html" %}
 
-% if title:
-<h1>{{ title }}</h1>
-% endif
+{% block content %}
+    {% if title %}
+        <h1>{{ title }}</h1>
+    {% endif %}
 
-<ul>
-  % for entry in entries:
-    <li>
-      <a href="{{ entry.url }}">{{ entry.title }}</a>
-      ({{ entry.date.day }} {{ entry.month_name[:3] }})
-    </li>
-  % endfor
-</ul>
+    <ul>
+        {% for entry in entries %}
+            <li>
+                <a href="{{ entry.url }}">{{ entry.title }}</a>
+                ({{ entry.date.day }} {{ entry.month_name[:3] }})
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
 
-<%def name="footer()">
-  <p><a href="{{ root }}">Home</a>
-  % for y in years:
-      <span class="sep">|</span>
-  %   if year == y:
-        <span class="selected">{{ y }}</span>
-  %   else:
-        <a href="{{ get(y).url }}">{{ y }}</a>
-  %   endif
-  % endfor
-  </p>
-</%def>
+{% block footer %}
+    <p>
+        <a href="{{ root }}">Home</a>
+
+        {% for y in years %}
+            <span class="sep">|</span>
+
+            {% if year == y %}
+                <span class="selected">{{ y }}</span>
+            {% else %}
+                <a href="{{ get(y).url }}">{{ y }}</a>
+            {% endif %}
+        {% endfor %}
+    </p>
+{% endblock %}
