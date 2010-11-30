@@ -102,7 +102,7 @@ class PageDatabase:
             if vars['title']:
                 vars['head_title'] = vars['title_format'] % vars
             html = template.render(**vars).strip()
-            fname = path.join(self._site['dirs']['deploy'], page.id) + '.html'
+            fname = path.join(self._site['dirs']['deploy'], page.path())
             with open(fname, 'w') as f:
                 f.write(html.encode('utf-8'))
 

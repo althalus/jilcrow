@@ -7,11 +7,9 @@ Licensed under the terms of the MIT license.
 """
 import re
 import urlparse
-from collections import defaultdict
 from datetime import datetime
 from os import path
 
-import dateutil.parser
 import PyRSS2Gen as rss2
 import yaml
 from BeautifulSoup import BeautifulSoup
@@ -47,6 +45,9 @@ class Page(dict):
     @property
     def full_url(self):
         return self._site['domain'] + self.url
+
+    def path(self):
+        return self.id + '.html'
 
 
 class Content(Page):
@@ -113,6 +114,9 @@ class Archive(Page):
             'template': 'archive_%s' % (month and 'month' or 'year'),
             'title': month and datetime(year, month, 1).strftime('%B %Y') or year,
         }, **attrs)
+
+    def path(self):
+        return path.join(self.id, 'index.html')
 
 class Month(Archive):
     def __init__(self, site, entries, year, month):
