@@ -10,17 +10,12 @@ import locale
 import os
 import re
 import shutil
-import sys
-import time
 from collections import defaultdict
-from datetime import datetime
-from itertools import izip
 from os import path
 
 import dateutil.parser
 import PyRSS2Gen as rss2
 import yaml
-from mako.exceptions import MakoException
 from mako.lookup import TemplateLookup
 
 from pilcrow import pages, util
