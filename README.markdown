@@ -15,4 +15,21 @@ Use It
 
     jilcrow .
 
+Structure
+---------
+
+    mysite/
+        content/
+            ... content files, like blog entries and flat pages ...
+        files/
+            ... miscellaneous files, will be copied directly into deploy/ ...
+        templates/
+            ... site templates ...
+        deploy/
+            ... where jilcrow puts the resulting files ...
+        site.yml
+
+Etc
+---
+
 Licensed under the terms of the MIT license (see the LICENSE file).
