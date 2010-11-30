@@ -1,0 +1,6 @@
+BeautifulSoup
+python-dateutil
+Jinja2
+Markdown
+PyRSS2Gen
+PyYAML
