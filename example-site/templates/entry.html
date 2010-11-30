@@ -1,40 +1,44 @@
-<%inherit file="_base.html"/>
+{% extends "base.html" %}
 
-% if title:
-<h1>${title}</h1>
-% endif
+{% block content %}
+    {% if title %}
+        <h1>{{ title }}</h1>
+    {% endif %}
 
-<p class="time" title="${date.isoformat()}">
-  ${date.strftime('%e %B %Y')}
-  % if posted:
-    (posted ${posted.strftime('%e %B %Y')})
-  % endif
-</p>
+    <p class="time" title="{{ date.isoformat() }}">
+        {{ date.strftime('%e %B %Y') }}
 
-${content}
+        {% if posted %}
+            (posted {{ posted.strftime('%e %B %Y') }})
+        {% endif %}
+    </p>
 
-<%def name="footer()">
-  <p>
-    % if tags:
-      % for i, tag in enumerate(tags_by_name()):
-        ${i and '<span class="sep">|</span>' or ''}
-        <a href="${tag.url}">${tag.title}</a>
-      % endfor
-    % endif
-  <p>
-    % if prevpost:
-      <a href="${prevpost.url}">&larr; ${prevpost.title or 'Untitled'}</a>
-      <span class="sep">|</span>
-    % endif
+    {{ content }}
+{% endblock %}
 
-    <a href="${get(date.year).url}">${date.year}</a>
+{% block footer %}
+    <p>
+        {% if tags %}
+            {%for i, tag in enumerate(tags_by_name()) %}
+                {{ i and '<span class="sep">|</span>' or '' }}
+                <a href="{{ tag.url }}">{{ tag.title }}</a>
+            {% endfor %}
+        {% endif %}
+    </p>
 
-    % if nextpost:
-      <span class="sep">|</span>
-      <a href="${nextpost.url}">${nextpost.title or 'Untitled'} &rarr;</a>
-    % endif
+    {% if prevpost %}
+        <a href="{{ prevpost.url }}">&larr; {{ prevpost.title or 'Untitled' }}</a>
+        <span class="sep">|</span>
+    {% endif %}
 
-    % if modified:
-      <p>Last modified: ${modified.strftime('%Y-%m-%d')}
-    % endif
-</%def>
+    <a href="{{ get(date.year).url }}">{{ date.year }}</a>
+
+    {% if nextpost %}
+        <span class="sep">|</span>
+        <a href="{{ nextpost.url }}">{{ nextpost.title or 'Untitled' }} &rarr;</a>
+    {% endif %}
+
+    {% if modified %}
+        <p>Last modified: {{ modified.strftime('%Y-%m-%d') }}
+    {% endif %}
+{% endblock %}

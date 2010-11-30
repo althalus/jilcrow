@@ -1,7 +1,9 @@
-<%inherit file="_base.html"/>
+{% extends "base.html" %}
 
-% if title:
-<h1>${title}</h1>
-% endif
+{% block content %}
+    {% if title %}
+        <h1>{{ title }}</h1>
+    {% endif %}
 
-${content}
+    {{ content }}
+{% endblock %}

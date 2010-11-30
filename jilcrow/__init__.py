@@ -13,10 +13,7 @@ if sys.version_info < (2, 6) or sys.version_info >= (3, 0):
 import locale
 locale.setlocale(locale.LC_ALL, '')
 
-import os
-
-from pilcrow import core, pages, util
-from pilcrow.core import Pilcrow
+from jilcrow.core import Jilcrow
 
 
 __author__ = 'Liam Cooke'
@@ -38,7 +35,7 @@ def main():
         parser.print_help()
         return 1
 
-    site = Pilcrow(site_path)
+    site = Jilcrow(site_path)
     site.build(clean=options.clean)
 
     if options.test:

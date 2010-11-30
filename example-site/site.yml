@@ -1,7 +1,7 @@
-site_title: Pilcrow
+site_title: Jilcrow
 title_format: "%(site_title)s: %(title)s"
-root: /pilcrow/
-domain: "http://inky.github.com/"
+root: /
+domain: "http://sjl.github.com/"
 clean_urls: no
 
 tags:

@@ -17,7 +17,7 @@ import yaml
 from BeautifulSoup import BeautifulSoup
 from markdown import markdown
 
-from pilcrow import util
+from jilcrow import util
 
 
 class Page(dict):

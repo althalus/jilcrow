@@ -13,12 +13,11 @@ import shutil
 from collections import defaultdict
 from os import path
 
-import dateutil.parser
 import PyRSS2Gen as rss2
 import yaml
-from mako.lookup import TemplateLookup
+from jinja2 import Environment, FileSystemLoader
 
-from pilcrow import pages, util
+from jilcrow import pages, util
 
 
 DEFAULT_CONFIG_FILE = 'site.yml'
@@ -51,7 +50,7 @@ class PageDatabase:
         self._site = site
         self.pages, self.tags = {}, {}
         tdir = self._site['dirs']['templates']
-        self.lookup = TemplateLookup(directories=[tdir], input_encoding='utf-8')
+        self.env = Environment(loader=FileSystemLoader(tdir))
 
     def __getitem__(self, id):
         return self.pages[id]
@@ -92,23 +91,23 @@ class PageDatabase:
     def render(self):
         for page in self:
             t = page.template or self._site['default_template']
-            template = self.lookup.get_template('%s.html' % t)
+            template = self.env.get_template('%s.html' % t)
             print('%14s : /%s' % (t, page.id))
 
             vars = dict(self._site, **page)
+
+            vars['len'] = len
+            vars['enumerate'] = enumerate
+
             if vars['title']:
                 vars['head_title'] = vars['title_format'] % vars
-            #try:
-            if True:
-                html = template.render_unicode(**vars).strip()
-                fname = path.join(self._site['dirs']['deploy'], page.id) + '.html'
-                with open(fname, 'w') as f:
-                    f.write(html.encode('utf-8'))
-            #except NameError:
-            #    util.die('template error: undefined variable in', template.filename)
+            html = template.render(**vars).strip()
+            fname = path.join(self._site['dirs']['deploy'], page.id) + '.html'
+            with open(fname, 'w') as f:
+                f.write(html.encode('utf-8'))
 
 
-class Pilcrow(dict):
+class Jilcrow(dict):
     FILES_ACTIONS = {
         '.less': lambda s, d: util.run_or_die('lessc %s %s' % (s, d)),
     }
@@ -203,7 +202,7 @@ class Pilcrow(dict):
             feed_date = feed_posts[0].posted or feed_posts[0].date
             feed = rss2.RSS2(items=[p.feed_item() for p in feed_posts],
                 title=self['site_title'], description=self.get('description', ''),
-                link=self['domain'] + self['root'], generator='Pilcrow',
+                link=self['domain'] + self['root'], generator='Jilcrow',
                 language=self['lang'], lastBuildDate=feed_date)
             with open(path.join(deploy_path, self['feed']), 'w') as f:
                 feed.write_xml(f, 'utf-8')

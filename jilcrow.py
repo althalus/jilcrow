@@ -11,9 +11,9 @@ warnings.simplefilter('ignore', DeprecationWarning)
 
 import sys
 
-import pilcrow
+import jilcrow
 
 
 if __name__ == '__main__':
-    exitstatus = pilcrow.main()
+    exitstatus = jilcrow.main()
     sys.exit(exitstatus or 0)
