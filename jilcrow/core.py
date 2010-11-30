@@ -101,6 +101,12 @@ class PageDatabase:
 
             if vars['title']:
                 vars['head_title'] = vars['title_format'] % vars
+
+            if page.id.endswith('/index'):
+                loc = page.id.rsplit('/', 1)[0]
+                vars['pages'] = [p for p in self
+                                 if p.id.startswith(loc) and not p.id == page.id]
+
             html = template.render(**vars).strip()
             fname = path.join(self._site['dirs']['deploy'], page.path())
             with open(fname, 'w') as f:
@@ -194,8 +200,6 @@ class Jilcrow(dict):
         })
         self['home'] = self['domain'] + self['root']
         db.render()
-        #try: db.render()
-        #except MakoException as e: util.die('template error:', e)
 
         if self['feed']:
             feed_posts = db.select(10)

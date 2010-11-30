@@ -9,7 +9,7 @@ Use It
     mkdir mysite
     cd mysite
     mkvirtualenv mysite
-    pip install -e http://bitbucket.org/sjl/jilcrow/#egg=jilcrow
+    pip install -e hg+http://bitbucket.org/sjl/jilcrow/#egg=jilcrow
 
     ... make your folders ...
 

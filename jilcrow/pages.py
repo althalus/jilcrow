@@ -18,6 +18,14 @@ from markdown import markdown
 from jilcrow import util
 
 
+def _split_path(p):
+    rest, tail = path.split(p)
+
+    if not rest:
+        return [tail]
+    else:
+        return _split_path(rest) + [tail]
+
 class Page(dict):
     sortkey_origin = lambda self: (util.timestamp(self.date), self.id)
     sortkey_posted = lambda self: (util.timestamp(self.posted or self.date), self.id)
@@ -61,7 +69,7 @@ class Content(Page):
     backposted = lambda self: self.posted and self.posted.date() > self.date.date()
 
     def __init__(self, site, fp):
-        id = path.splitext(path.basename(fp.name))[0]
+        id = path.splitext(path.join(*(_split_path(fp.name)[1:])))[0]
         Page.__init__(self, site, id, modified=util.filemtime(fp), tags=set(), summary='')
         data = fp.read().split('\n\n', 1)
         head = yaml.load(data.pop(0))
