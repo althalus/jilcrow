@@ -25,7 +25,7 @@
             {% if year == y %}
                 <span class="selected">{{ y }}</span>
             {% else %}
-                <a href="{{ get(y).url }}">{{ y }}</a>
+                <a href="{{ get("archives/%s" % y).url }}">{{ y }}</a>
             {% endif %}
         {% endfor %}
     </p>
