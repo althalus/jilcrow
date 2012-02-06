@@ -55,7 +55,7 @@ class Page(dict):
         return self._site['domain'] + self.url
 
     def path(self):
-        return self.id + '.html'
+        return self._site.join_path(self.id)
 
 
 class Content(Page):
@@ -113,33 +113,27 @@ class Content(Page):
 
 
 class Archive(Page):
-    def __init__(self, site, id, entries, year, month, attrs={}):
-        id = site.join_url(year, month and '%02d' % month, ext=False)
+    def __init__(self, site, entries, year, month, attrs={}):
+        month = month and site.join_url(year, 
+                datetime(year, month, 1).strftime('%B')) or ''
+        id = ("archives/%s/%s" % (year, month.lower())).strip("/")
         Page.__init__(self, site, id, {
             'entries': entries,
             'year': year,
             'month': month,
             'template': 'archive_%s' % (month and 'month' or 'year'),
-            'title': month and datetime(year, month, 1).strftime('%B %Y') or year,
+            'title': ("%s %s" % (month, year)).strip()
         }, **attrs)
-
-    def path(self):
-        return path.join(self.id, 'index.html')
 
 class Month(Archive):
     def __init__(self, site, entries, year, month):
         if not (1 <= month <= 12):
             raise ValueError, 'month must be in the range 1-12'
-        id = site.join_url(year, '%02d' % month, ext=False)
-        Archive.__init__(self, site, id, entries, year, month, {
-            'title': datetime(year, month, 1).strftime('%B %Y'),
-        })
+        Archive.__init__(self, site, id, entries, year, month)
 
 class Year(Archive):
     def __init__(self, site, entries, year):
-        Archive.__init__(self, site, year, entries, year, 0, {
-            'title': str(year),
-        })
+        Archive.__init__(self, site, entries, year, 0)
 
 
 class Tag(Page):
@@ -147,7 +141,8 @@ class Tag(Page):
     sortkey_tag = lambda self: self.name
 
     def __init__(self, site, tag):
-        Page.__init__(self, site, tag, template='tag', tagged={})
+        id = "tags/%s" % tag
+        Page.__init__(self, site, id, template='tag', tagged={})
         self.name, self['tag'] = tag, tag
         self['title'] = self._site.get('tags', {}).get(tag, tag)
 
