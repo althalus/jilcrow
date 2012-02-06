@@ -141,6 +141,13 @@ class Jilcrow(dict):
             url = url[:-len(ext)]
         return url + ext
 
+    def join_path(self, id):
+        deploy_path = path.realpath(self['dirs']['deploy'])
+        if self['clean_urls']:
+            return path.join(deploy_path, id, 'index.html')
+        else:
+            return path.join(deploy_path, "%s.html" % id)
+
     def build(self, clean=False):
         base_path = path.realpath(os.curdir)
         deploy_path = path.realpath(self['dirs']['deploy'])
@@ -181,7 +188,10 @@ class Jilcrow(dict):
             for prevpost, post, nextpost in util.neighbours(posts):
                 post['prevpost'], post['nextpost'] = prevpost, nextpost
 
-        dirs = filter(bool, [os.path.dirname(p.id) for p in db])
+        if self['clean_urls']:
+            dirs = [p.id for p in db]
+        else:
+            dirs = filter(bool, [os.path.dirname(p.id) for p in db])
         for d in sorted(set(dirs)):
             util.mkdir(os.path.join(deploy_path, d))
 
