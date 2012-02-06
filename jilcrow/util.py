@@ -41,7 +41,7 @@ def norm_tags(obj):
 
 
 def mkdir(d):
-    try: os.mkdir(d)
+    try: os.makedirs(d)
     except OSError: pass
 
 def neighbours(iterable):
