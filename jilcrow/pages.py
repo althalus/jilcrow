@@ -80,7 +80,7 @@ class Content(Page):
             self[key] = self.NORM.get(key, util.identity)(val)
         if self.date:
             self.update({
-                'id': self._site.join_url(self.date.year, id, ext=False),
+                'id': id,
                 'template': self.template or 'entry',
                 'month_name': self.date.strftime('%B'),
                 'prevpost': None,
@@ -114,8 +114,7 @@ class Content(Page):
 
 class Archive(Page):
     def __init__(self, site, entries, year, month, attrs={}):
-        month = month and site.join_url(year, 
-                datetime(year, month, 1).strftime('%B')) or ''
+        month = month and datetime(year, month, 1).strftime('%B') or ''
         id = ("archives/%s/%s" % (year, month.lower())).strip("/")
         Page.__init__(self, site, id, {
             'entries': entries,
@@ -129,7 +128,7 @@ class Month(Archive):
     def __init__(self, site, entries, year, month):
         if not (1 <= month <= 12):
             raise ValueError, 'month must be in the range 1-12'
-        Archive.__init__(self, site, id, entries, year, month)
+        Archive.__init__(self, site, entries, year, month)
 
 class Year(Archive):
     def __init__(self, site, entries, year):
