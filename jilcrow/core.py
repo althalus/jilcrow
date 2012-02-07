@@ -172,7 +172,7 @@ class Jilcrow(dict):
                 print('{0} => {1}'.format(path.relpath(src, base_path), path.relpath(dest, base_path)))
         os.chdir(base_path)
 
-        db, years = PageDatabase(self), defaultdict(list)
+        db, years = PageDatabase(self), defaultdict(lambda: defaultdict(list))
         for root, _, files in os.walk(self['dirs']['content']):
             exts = ['.%s' % ext for ext in self['content_extensions']]
             for file in [f for f in files if path.splitext(f)[1] in exts]:
@@ -180,13 +180,18 @@ class Jilcrow(dict):
                     page = pages.Content(self, fp)
                     db.add(page)
                     if page.date:
-                        years[page.date.year].append(page)
+                        years[page.date.year][page.date.month].append(page)
 
-        for year, posts in sorted(years.items()):
-            posts = sorted(posts, key=pages.Page.sortkey_origin)
-            db.add(pages.Year(self, posts, year))
-            for prevpost, post, nextpost in util.neighbours(posts):
-                post['prevpost'], post['nextpost'] = prevpost, nextpost
+        for year, months in years.items():
+            month_pages = []
+            for month, posts in sorted(months.items()):
+                posts = sorted(posts, key=pages.Page.sortkey_origin)
+                m = pages.Month(self, posts, year, month)
+                db.add(m)
+                month_pages.append(m)
+                for prevpost, post, nextpost in util.neighbours(posts):
+                    post['prevpost'], post['nextpost'] = prevpost, nextpost
+            db.add(pages.Year(self, month_pages, year))
 
         if self['clean_urls']:
             dirs = [p.id for p in db]

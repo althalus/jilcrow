@@ -9,6 +9,7 @@
         {% for entry in entries %}
             <li>
                 <a href="{{ entry.url }}">{{ entry.title }}</a>
+                ({{ entry.date }} {{ entry.month_name[:3] }})
             </li>
         {% endfor %}
     </ul>
