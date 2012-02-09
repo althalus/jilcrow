@@ -7,21 +7,51 @@
     </head>
 
     <body>
-        <div id="page">
-
             <header>
+                <div id="page-heading">
                 {% if title %}
-                    <p><a href="{{ root }}">{{ site_title }}</a></p>
+                    <p class="main-heading"><a href="{{ root }}">{{ site_title }}</a></p>
+                    {% if site_subtitle %}
+                    <p class="sub-headding">{{ site_subtitle }}</p>
+                    {% endif %}
                 {% else %}
-                    <h1><a href="{{ root }}">{{ site_title }}</a></h1>
+                    <hgroup>
+                    <h1 class="main-heading"><a href="{{ root }}">{{ site_title }}</a></h1>
+                    {% if site_subtitle %}
+                    <h2 class="sub-headding">{{ site_subtitle }}</h2>
+                    {% endif %}
+                    </hgroup>
                 {% endif %}
+                </div>
+                <nav id="main-nav">
+                    <a href="{{ root }}">Home</a>
+                    <a href="{{ get("about").url }}">About</a>
+                </nav>
             </header>
 
             <div id="body">
                 {% block content %}
                 {% endblock %}
             </div>
-
+            <aside id="sidebar">
+            {% block aside %}{% endblock %}
+                <section>
+                    <h2>Links</h2>
+                    <ul>
+                        <li><a href="{{ get('about').url }}">About</a>
+                        <li><a href="http://bitbucket.org/althalus/jilcrow/">Code on BitBucket</a>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Tags</h2>
+                    <ul>
+                        {% for tag in tags_by_count() %}
+                            <li><a href="{{ tag.url }}">{{ tag.title }}</a> ({{ len(tag.tagged) }})
+                        {% endfor %}
+                    </ul>
+                </section>
+            </aside>
+            <div class="cf"></div>
             <footer>
                 {% block footer %}
                     {% if id != 'index' %}
@@ -29,6 +59,5 @@
                     {% endif %}
                 {% endblock %}
             </footer>
-        </div>
     </body>
 </html>

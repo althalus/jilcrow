@@ -1,27 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-    {{ content }}
 
-    <h2>Sample Posts</h2>
+    <h2>Recent Posts</h2>
     <ul>
         {% for page in pages(5) %}
-            <li><a href="{{ page.url }}">{{ page.title or 'Untitled' }}</a>
-            ({{ (page.posted or page.date).strftime('%Y-%b-%d') }})
+        <article>
+            <a href="{{ page.url }}">{{ page.title or 'Untitled' }}</a>
+            <time>({{ (page.posted or page.date).strftime('%Y-%b-%d') }})</time>
+            {% if page.summary %}<div class="summary">{{ page.summary }}{% endif %}
+        </article>
         {% endfor %}
     </ul>
 
-    <h2>Links</h2>
-    <ul>
-        <li><a href="{{ get('about').url }}">About</a>
-        <li><a href="http://bitbucket.org/sjl/jilcrow/">Code on BitBucket</a>
-    </ul>
-
-    <h2>Tags</h2>
-    <ul>
-        {% for tag in tags_by_count() %}
-            <li><a href="{{ tag.url }}">{{ tag.title }}</a> ({{ len(tag.tagged) }})
-        {% endfor %}
-    </ul>
 {% endblock %}
 

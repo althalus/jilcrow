@@ -1,4 +1,13 @@
 @import "_reset";
+@import "_grid";
+
+// Specify the number of columns and set column and gutter widths
+@columns: 12;
+@column-width: 60;
+@gutter-width: 15;
+
+// Remove the definition below for a pixel-based layout
+@total-width: 99.5%;
 
 @background: #222;
 @text: #eee;
@@ -8,15 +17,38 @@ body {
     background: @background / 1.5;
     color: @text;
     font: 1em/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    margin: 3em;
     text-shadow: (@background - #181818) 0 1px 1px;
 }
 
-#page {
+#page-heading {
+    .column(4);
+    .push(4);
+}
+#main-nav {
+    .column(4);
+}
+
+#body, #sidebar section {
     background: @background;
     border: 2px solid (@background * 1.5);
-    max-width: 36em;
-    padding: 2em 3em;
+    border-radius: 1.5em;
+}
+#sidebar section {
+    margin-bottom: 1em;
+}
+#body *, #sidebar section * {
+    margin-left: 0.7em;
+    margin-right: 0.7em;
+}
+.cf {
+    .clearfix();
+}
+
+#body {
+    .column(9);
+}
+#sidebar {
+    .column(3);
 }
 
 header, footer {
@@ -76,4 +108,12 @@ a:link, a:visited {
 }
 a:hover {
     color: @link + #333;
+}
+
+@media screen and (max-width: 720px) {
+    #body,
+    #sidebar {
+        .column(12);
+        margin-bottom: 1em;
+}
 }
