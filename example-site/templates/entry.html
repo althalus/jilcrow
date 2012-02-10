@@ -14,17 +14,15 @@
     </p>
 
     {{ content }}
-{% endblock %}
-
-{% block footer %}
-    <p>
+    <nav id="related-links">
+    Tags: 
         {% if tags %}
             {%for i, tag in enumerate(tags_by_name()) %}
                 {{ i and '<span class="sep">|</span>' or '' }}
                 <a href="{{ tag.url }}">{{ tag.title }}</a>
             {% endfor %}
         {% endif %}
-    </p>
+    <br/>
 
     {% if prevpost %}
         <a href="{{ prevpost.url }}">&larr; {{ prevpost.title or 'Untitled' }}</a>
@@ -38,6 +36,9 @@
         <a href="{{ nextpost.url }}">{{ nextpost.title or 'Untitled' }} &rarr;</a>
     {% endif %}
 
+    </nav>
+{% endblock %}
+{% block footer %}
     {% if modified %}
         <p>Last modified: {{ modified.strftime('%Y-%m-%d') }}
     {% endif %}
