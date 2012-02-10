@@ -190,9 +190,13 @@ class Jilcrow(dict):
                 m = pages.Month(self, posts, year, month)
                 db.add(m)
                 month_pages.append(m)
-                for prevpost, post, nextpost in util.neighbours(posts):
-                    post['prevpost'], post['nextpost'] = prevpost, nextpost
             db.add(pages.Year(self, month_pages, year))
+        for prevpost, post, nextpost in util.neighbours(db.select(chrono=True,sortby_origin=False)):
+                    post['prevpost'], post['nextpost'] = prevpost, nextpost
+                    try:
+                        print post['prevpost'].title, post['nextpost'].title
+                    except:
+                        pass
 
         if self['clean_urls']:
             dirs = [p.id for p in db]
