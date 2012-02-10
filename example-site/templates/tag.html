@@ -5,7 +5,7 @@
         <h1>{{ title }}</h1>
     {% endif %}
 
-    {% for page in pages(tag=tag) %}
+    {% for page in get_pages(tag=tag) %}
         <h2>
             <a href="{{ page.url }}">{{ page.title or 'Untitled' }}</a>
             ({{ (page.posted or page.date).strftime('%Y-%b-%d') }})

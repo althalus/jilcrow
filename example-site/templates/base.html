@@ -36,6 +36,13 @@
             <aside id="sidebar">
             {% block aside %}{% endblock %}
                 <section>
+                    <h2>Recent Posts</h2>
+                    <ul>
+                    {% for page in get_pages(5) %}
+                        <li><a href="{{ page.url }}">{{ page.title or 'Untitled' }}</a></li>
+                    {% endfor %}
+                </section>
+                <section>
                     <h2>Links</h2>
                     <ul>
                         <li><a href="{{ get('about').url }}">About</a>
@@ -45,7 +52,7 @@
                 <section>
                     <h2>Tags</h2>
                     <ul>
-                        {% for tag in tags_by_count() %}
+                        {% for tag in all_tags() %}
                             <li><a href="{{ tag.url }}">{{ tag.title }}</a> ({{ len(tag.tagged) }})
                         {% endfor %}
                     </ul>

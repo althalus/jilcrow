@@ -204,7 +204,7 @@ class Jilcrow(dict):
 
         self.update({
             'get': lambda id: db[str(id)],
-            'pages': db.select,
+            'get_pages': db.select,
             'domain': self['domain'].rstrip('/'),
             'root': '/' + self.get('root', '').lstrip('/'),
             'head_title': self.get('site_title', ''),
