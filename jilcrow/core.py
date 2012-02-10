@@ -98,6 +98,7 @@ class PageDatabase:
 
             vars['len'] = len
             vars['enumerate'] = enumerate
+            vars['all_tags'] = self.tags_by_count
 
             if vars['title']:
                 vars['head_title'] = vars['title_format'] % vars
