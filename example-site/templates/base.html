@@ -24,8 +24,11 @@
                 {% endif %}
                 </div>
                 <nav id="main-nav">
-                    <a href="{{ root }}">Home</a>
-                    <a href="{{ get("about").url }}">About</a>
+                    <ul>
+                        {% for link,name in menu.items() %}
+                        <li><a href="{{ link }}">{{ name }}</a></li>
+                        {% endfor %}
+                    </ul>
                 </nav>
             </header>
 

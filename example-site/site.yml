@@ -14,6 +14,13 @@ tags:
   wikipedia: Wikipedia
   wtf: WTF
 
+# Menu items here. These show up across the top, so best to keep it short.
+menu:
+  "/": Home
+  "/about/": About
+  "/archive/": Archives
+  "/projects/": Projects
+
 # Side bars. Answer yes or no to the ones you want/dont want
 show_links_sidebar: yes
 show_recent_posts: yes

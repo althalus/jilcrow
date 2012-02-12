@@ -26,6 +26,15 @@ body {
 }
 #main-nav {
     .column(4);
+    ul {
+        li {
+            float:right;
+            a {
+                display: block;
+            margin-left: 15px;
+            }
+        }
+    }
 }
 
 #body, #sidebar section {
@@ -112,7 +121,9 @@ a:hover {
 
 @media screen and (max-width: 720px) {
     #body,
-    #sidebar {
+    #sidebar,
+    #main-nav,
+    #main-heading {
         .column(12);
         margin-bottom: 1em;
 }
