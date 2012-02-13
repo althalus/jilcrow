@@ -29,7 +29,7 @@
         <span class="sep">|</span>
     {% endif %}
 
-    <a href="{{ get("archives/%s" % date.year).url }}">{{ date.year }}</a>
+    <a href="{{ get("archives/%s" % (posted and posted.year or date.year)).url }}">{{ date.year }}</a>
 
     {% if nextpost %}
         <span class="sep">|</span>
