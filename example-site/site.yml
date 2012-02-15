@@ -32,4 +32,4 @@ links:
   "http://localhost:8000/about": About
 
 # Disqus: no or false to disable it, otherwise, put your disqus_shortname here
-disqus: justinstewardblog
+disqus: replacewithyourshortname
