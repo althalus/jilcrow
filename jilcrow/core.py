@@ -234,6 +234,7 @@ class Jilcrow(dict):
             'default_template': self.get('default_template', 'page'),
         })
         self['home'] = self['domain'] + self['root']
+        if not db.pages.get('index'): db.add(pages.Index(self))
         db.render()
 
         if self['feed']:

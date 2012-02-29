@@ -57,6 +57,9 @@ class Page(dict):
     def path(self):
         return self._site.join_path(self.id)
 
+class Index(Page):
+    def __init__(self, site):
+        super(Index, self).__init__(site, 'index', {'title':'Index','template':'home'})
 
 class Content(Page):
     NORM = {
