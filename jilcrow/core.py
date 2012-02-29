@@ -191,6 +191,8 @@ class Jilcrow(dict):
                 with codecs.open(path.join(root, file), 'r', encoding='utf-8') as fp:
                     page = pages.Content(self, fp)
                     if page.date:
+                        if page.posted == False:
+                            continue
                         if page.posted:
                             posted = page.posted.tzinfo and page.posted \
                                     or page.posted.replace(tzinfo=utc())
@@ -200,6 +202,8 @@ class Jilcrow(dict):
                         else:
                             db.add(page)
                             years[page.date.year][page.date.month].append(page)
+                    else:
+                            db.add(page)
 
         for year, months in years.items():
             month_pages = []
@@ -216,7 +220,7 @@ class Jilcrow(dict):
             dirs = [p.id for p in db]
         else:
             dirs = filter(bool, [os.path.dirname(p.id) for p in db])
-        dirs = filter(lambda x: not x == "index",dirs)
+        dirs = filter(lambda x: not x.endswith("index"),dirs)
         for d in sorted(set(dirs)):
             util.mkdir(os.path.join(deploy_path, d))
 
