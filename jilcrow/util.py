@@ -15,6 +15,13 @@ from itertools import izip
 
 import dateutil.parser
 
+# We need a timezone... but there's no point pulling in the whole of pytz
+from datetime import datetime, tzinfo, timedelta
+
+class utc(tzinfo):
+    def tzname(self, dt): return "UTC"
+    def dst(self, dt): return timedelta(0)
+    def utcoffset(self, dt): return timedelta(0)
 
 def die(*msg):
     sys.stderr.write(' '.join(str(m) for m in msg) + '\n')
@@ -33,7 +40,7 @@ timestamp = lambda dt: dt and int(time.mktime(dt.timetuple())) or 0
 
 
 norm_key = lambda s: re.sub('[- ]+', '_', s.lower())
-norm_time = lambda s: s and dateutil.parser.parse(str(s), fuzzy=True) or None
+norm_time = lambda s: s and dateutil.parser.parse(str(s), fuzzy=True).replace(tzinfo=utc()) or None
 
 def norm_tags(obj):
     tags = is_str(obj) and obj.split(',' in obj and ',' or None) or obj

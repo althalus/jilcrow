@@ -19,16 +19,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from jilcrow import pages, util
 
-# We need a timezone... but there's no point pulling in the whole of pytz
-from datetime import datetime, tzinfo, timedelta
-
-class utc(tzinfo):
-    def tzname(self, dt): return "UTC"
-    def dst(self, dt): return timedelta(0)
-    def utcoffset(self, dt): return timedelta(0)
- 
-
-
+from datetime import datetime
 
 DEFAULT_CONFIG_FILE = 'site.yml'
 DEFAULT_CONFIG = {
@@ -186,24 +177,17 @@ class Jilcrow(dict):
         db, years = PageDatabase(self), defaultdict(lambda: defaultdict(list))
         for root, _, files in os.walk(self['dirs']['content']):
             exts = ['.%s' % ext for ext in self['content_extensions']]
-            now = datetime.now().replace(tzinfo=utc())
+            now = datetime.now().replace(tzinfo=util.utc())
             for file in [f for f in files if path.splitext(f)[1] in exts]:
                 with codecs.open(path.join(root, file), 'r', encoding='utf-8') as fp:
                     page = pages.Content(self, fp)
                     if page.date:
-                        if page.posted == False:
+                        if page.date > now:
                             continue
-                        if page.posted:
-                            posted = page.posted.tzinfo and page.posted \
-                                    or page.posted.replace(tzinfo=utc())
-                            if posted < now:
-                                db.add(page)
-                                years[posted.year][posted.month].append(page)
-                        else:
-                            db.add(page)
-                            years[page.date.year][page.date.month].append(page)
+                        db.add(page)
+                        years[page.date.year][page.date.month].append(page)
                     else:
-                            db.add(page)
+                        db.add(page)
 
         for year, months in years.items():
             month_pages = []

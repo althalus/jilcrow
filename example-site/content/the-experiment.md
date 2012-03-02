@@ -1,5 +1,6 @@
 title: The Experiment
-posted: 2032-02-14
+date: 2032-02-14
+tags: wtf
 
 This project was founded on [Jilcrow](http://github.com/sjl/jilcrow) which in
 turn was a fork of [Pilcrow](http://github.com/inky/pilcrow). The plan was to

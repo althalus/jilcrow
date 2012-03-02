@@ -99,6 +99,9 @@ class Content(Page):
             self['summary'] = self.NORM['summary'](summary)
             return summary
         self['content'] = markdown(self.SUMMARY.sub(_summary, body).strip())
+        if not self['summary']:
+            soup = BeautifulSoup(self['content'])
+            self['summary'] = soup.first('p')
 
     def feed_item(self):
         url, title = self.full_url, self.title or 'Untitled'
