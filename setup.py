@@ -12,7 +12,7 @@ else:
 
 setup(
     name='jilcrow',
-    version='0.1.0',
+    version='0.1.1',
     install_requires=['BeautifulSoup', 'python-dateutil', 'Jinja2', 'Markdown',
                       'PyRSS2Gen', 'PyYAML'],
     description=description,
