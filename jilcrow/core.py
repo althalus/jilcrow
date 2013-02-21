@@ -14,33 +14,33 @@ from collections import defaultdict
 from os import path
 
 import PyRSS2Gen as rss2
-import yaml
 from jinja2 import Environment, FileSystemLoader
 
 from jilcrow import pages, util
 
 from datetime import datetime
+from io import StringIO
+from ConfigParser import RawConfigParser
 
-DEFAULT_CONFIG_FILE = 'site.yml'
-DEFAULT_CONFIG = {
-    'domain': 'http://localhost/',
-    'root': '/',
-    'clean_urls': False,
-    'content_extensions': ('text', 'markdown', 'mkdn', 'md'),
-    'dirs': {
-        'content': 'content',
-        'files': 'files',
-        'templates': 'templates',
-        'deploy': 'deploy',
-    },
-    'feed': 'feed.rss',
-    'files_exclude': r'^[\._]|~$',
-    'files_include': r'^\.htaccess$',
-    'files_rename': {
-        '.less': '.css',
-    },
-    'lang': 'en',
-}
+DEFAULT_CONFIG_FILE = 'site.cfg'
+DEFAULT_CONFIG = u"""[MAIN]
+domain: http://localhost/
+root: /
+clean_urls: False
+content_extensions: text, markdown, mkdn, md
+feed: feed.rss
+files_exclude: r^[\._]|~$
+files_include: r^\.htaccess$
+lang: en
+[DIRS]
+content: content
+files: files
+templates: templates
+deploy: deploy
+[RENAME]
+.less: .css
+"""
+
 
 
 class PageDatabase:
@@ -126,15 +126,27 @@ class Jilcrow(dict):
         if not path.exists(config_file):
             util.die('%s not found' % config_file)
 
-        dict.__init__(self, DEFAULT_CONFIG)
         self.update(locale.localeconv())
-        with open(config_file) as f:
-            for k, v in yaml.load(f).items():
-                k = util.norm_key(k)
-                if type(v) is dict:
-                    self[k] = dict(self.get(k, {}), **v)
-                else:
-                    self[k] = v
+        cp = RawConfigParser()
+        cp.optionxform = str
+        cp.readfp(StringIO(DEFAULT_CONFIG))
+        cp.read(config_file)
+        self.update(self.normalize(cp.items("MAIN")))
+        self['dirs'] = self.normalize(cp.items("DIRS"))
+        self['files_rename'] = self.normalize(cp.items("RENAME"))
+        self['sidebars'] = self.normalize(cp.items("SIDEBARS"))
+        self['menu'] = dict(cp.items("MENU"))
+        self['links'] = dict(cp.items("LINKS"))
+        self['content_extensions'] = [x.strip() for x in self['content_extensions'].split(",")]
+        if 'tags' in self:
+            self['tags'] = [x.strip() for x in self['tags'].split(",")]
+
+    def normalize(self,d):
+        res = {}
+        for k, v in d:
+            k = util.norm_key(k)
+            res[k] = v
+        return res
 
     def join_url(self, *parts, **kwargs):
         ext = (kwargs.get('ext', 1) and not self['clean_urls']) and '.html' or ''

@@ -25,7 +25,7 @@
                 </div>
                 <nav id="main-nav">
                     <ul>
-                        {% for link,name in menu.items() %}
+                        {% for name,link in menu.items() %}
                         <li><a href="{{ link }}">{{ name }}</a></li>
                         {% endfor %}
                     </ul>
@@ -51,7 +51,7 @@
                 <section>
                     <h2>Links</h2>
                     <ul>
-                        {% for link,name in links.items() %}
+                        {% for name,link in links.items() %}
                         <li><a href="{{link}}">{{name}}</a></li>
                         {% endfor %}
                     </ul>
