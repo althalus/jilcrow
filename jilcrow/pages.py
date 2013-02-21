@@ -11,9 +11,8 @@ from datetime import datetime
 from os import path
 
 import PyRSS2Gen as rss2
-import yaml
 from BeautifulSoup import BeautifulSoup
-from markdown import markdown
+from markdown import Markdown, markdown
 
 from jilcrow import util
 
@@ -72,15 +71,29 @@ class Content(Page):
     backposted = lambda self: self.posted and self.posted.date() > self.date.date()
 
     def __init__(self, site, fp):
+        md = Markdown(extensions= ['extra', 'meta'])
         id = path.splitext(path.join(*(_split_path(fp.name)[1:])))[0]
         Page.__init__(self, site, id, modified=util.filemtime(fp), tags=set(), summary='')
-        data = fp.read().split('\n\n', 1)
-        head = yaml.load(data.pop(0))
-        body = data and data.pop() or ''
+        data = fp.read()
+
+        def _summary(m):
+            summary = m.group(2).strip()
+            self['summary'] = self.NORM['summary'](summary)
+            return summary
+        self['content'] = md.convert(self.SUMMARY.sub(_summary, data).strip())
+        head = md.Meta
+        if not self['summary']:
+            soup = BeautifulSoup(self['content'])
+            self['summary'] = soup.first('p')
 
         for key, val in head.items():
             key = util.norm_key(key)
-            self[key] = self.NORM.get(key, util.identity)(val)
+            if len(val) == 1:
+                val = val[0]
+            try:
+                self[key] = self.NORM.get(key, util.identity)(val)
+            except:
+                print data
         if self.date:
             self.update({
                 'id': id,
@@ -93,15 +106,6 @@ class Content(Page):
             })
         if 'tags' in self._site:
             self['tags'] -= set((tag for tag in self.tags if tag not in self._site['tags']))
-
-        def _summary(m):
-            summary = m.group(2).strip()
-            self['summary'] = self.NORM['summary'](summary)
-            return summary
-        self['content'] = markdown(self.SUMMARY.sub(_summary, body).strip())
-        if not self['summary']:
-            soup = BeautifulSoup(self['content'])
-            self['summary'] = soup.first('p')
 
     def feed_item(self):
         url, title = self.full_url, self.title or 'Untitled'

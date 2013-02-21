@@ -10,7 +10,6 @@ import os
 import re
 import sys
 import time
-from datetime import datetime
 from itertools import izip
 
 import dateutil.parser
