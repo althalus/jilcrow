@@ -78,7 +78,13 @@ class PageDatabase:
                 page_tags[tag_name] = tag
             page['tags'] = page_tags
 
-    def select(self, limit=None, dated=True, tag=None, chrono=False, sortby_origin=None):
+    def select(self, start=0, limit=None, dated=True, tag=None, chrono=False, sortby_origin=None):
+        if limit == None and start:
+            # db.select(10) still returns [:10], but db.select(10,10) returns [10:21]
+            limit = start
+            start=0
+        elif start and limit:
+            limit += start + 1
         if sortby_origin is None:
             sortby_origin = bool(chrono)
         sortkey = sortby_origin and pages.Page.sortkey_origin or pages.Page.sortkey_posted
@@ -87,7 +93,7 @@ class PageDatabase:
             results = [page for page in results if page.date]
             if tag:
                 results = [page for page in results if tag in page.tags]
-        return tuple(results)[:limit]
+        return tuple(results)[start:limit]
 
     def render(self):
         for page in self:
