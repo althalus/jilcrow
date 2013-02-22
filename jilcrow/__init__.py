@@ -10,6 +10,8 @@ if sys.version_info < (2, 6) or sys.version_info >= (3, 0):
     msg = "only Python 2.6 is supported at the moment"
     raise ImportError(msg)
 
+import shutil
+import os
 import locale
 locale.setlocale(locale.LC_ALL, '')
 
@@ -27,6 +29,8 @@ def main():
     parser.add_option('-x', '--clean', action='store_true', default=False)
     parser.add_option('-t', '--test', action='store_true', default=False,
                       help='open the site in your browser after building')
+    parser.add_option('-i','--init',action='store_true',default=False,
+                      help='Initialise layout and templates for a new site at path_to_site')
     options, args = parser.parse_args()
 
     if args:
@@ -35,8 +39,16 @@ def main():
         parser.print_help()
         return 1
 
-    site = Jilcrow(site_path)
-    site.build(clean=options.clean)
+
+    if options.init:
+        datadir = os.path.join(os.path.dirname(__file__),"samplesite")
+        try:
+            shutil.copytree(datadir, site_path)
+        except Exception, e:
+            print "Couldn't initiate site: %s" % e
+    else:
+        site = Jilcrow(site_path)
+        site.build(clean=options.clean)
 
     if options.test:
         import webbrowser

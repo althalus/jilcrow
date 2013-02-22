@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if title %}
+        <h1>{{ title }}</h1>
+    {% endif %}
+
+    <p class="time" title="{{ date.isoformat() }}">
+        {{ date.strftime('%e %B %Y') }}
+
+        {% if posted %}
+            (posted {{ posted.strftime('%e %B %Y') }})
+        {% endif %}
+    </p>
+
+    {{ content }}
+    <nav id="related-links">
+    Tags: 
+        {% if tags %}
+            {%for i, tag in enumerate(tags_by_name()) %}
+                {{ i and '<span class="sep">|</span>' or '' }}
+                <a href="{{ tag.url }}">{{ tag.title }}</a>
+            {% endfor %}
+        {% endif %}
+    <br/>
+
+    {% if prevpost %}
+        <a href="{{ prevpost.url }}">&larr; {{ prevpost.title or 'Untitled' }}</a>
+        <span class="sep">|</span>
+    {% endif %}
+
+    <a href="{{ get("archives/%s" % (posted and posted.year or date.year)).url }}">{{ date.year }}</a>
+
+    {% if nextpost %}
+        <span class="sep">|</span>
+        <a href="{{ nextpost.url }}">{{ nextpost.title or 'Untitled' }} &rarr;</a>
+    {% endif %}
+
+    </nav>
+    {% if disqus %}
+    <aside id="disqus-comments"><h2>Comments</h2>
+        <div id="disqus_thread"></div>
+        <a href="http://disqus.com" class="dsq-brlink">blog comments powered by <span class="logo-disqus">Disqus</span></a>
+        <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+    </aside>
+    <script type="text/javascript">
+    /* * * CONFIGURATION VARIABLES: EDIT BEFORE PASTING INTO YOUR WEBPAGE * * */
+    var disqus_developer = 0
+    var disqus_shortname = '{{ disqus }}'; // required: replace example with your forum shortname
+
+    // The following are highly recommended additional parameters. Remove the slashes in front to use.
+    // var disqus_identifier = 'unique_dynamic_id_1234';
+    // var disqus_url = 'http://example.com/permalink-to-page.html';
+
+    /* * * DON'T EDIT BELOW THIS LINE * * */
+    (function() {
+        var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+        dsq.src = 'http://' + disqus_shortname + '.disqus.com/embed.js';
+        (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    {% endif %}
+{% endblock %}
+{% block footer %}
+    {% if modified %}
+        <p>Last modified: {{ modified.strftime('%Y-%m-%d') }}
+    {% endif %}
+{% endblock %}

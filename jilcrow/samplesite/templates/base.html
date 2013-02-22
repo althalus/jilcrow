@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+    <head>
+        <meta charset="utf-8">
+        <title>{{ head_title }}</title>
+        <link rel="stylesheet" href="{{ root }}style/style.css">
+    </head>
+
+    <body>
+            <header>
+                <div id="page-heading">
+                {% if title %}
+                    <p class="main-heading"><a href="{{ root }}">{{ site_title }}</a></p>
+                    {% if site_subtitle %}
+                    <p class="sub-headding">{{ site_subtitle }}</p>
+                    {% endif %}
+                {% else %}
+                    <hgroup>
+                    <h1 class="main-heading"><a href="{{ root }}">{{ site_title }}</a></h1>
+                    {% if site_subtitle %}
+                    <h2 class="sub-headding">{{ site_subtitle }}</h2>
+                    {% endif %}
+                    </hgroup>
+                {% endif %}
+                </div>
+                <nav id="main-nav">
+                    <ul>
+                        {% for name,link in menu.items() %}
+                        <li><a href="{{ link }}">{{ name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </nav>
+            </header>
+
+            <div id="body">
+                {% block content %}
+                {% endblock %}
+            </div>
+            <aside id="sidebar">
+            {% block aside %}{% endblock %}
+                {% if show_recent_posts %}
+                <section>
+                    <h2>Recent Posts</h2>
+                    <ul>
+                    {% for page in get_pages(5) %}
+                        <li><a href="{{ page.url }}">{{ page.title or 'Untitled' }}</a></li>
+                    {% endfor %}
+                </section>
+                {% endif %}
+                {% if show_links_sidebar %}
+                <section>
+                    <h2>Links</h2>
+                    <ul>
+                        {% for name,link in links.items() %}
+                        <li><a href="{{link}}">{{name}}</a></li>
+                        {% endfor %}
+                    </ul>
+                </section>
+                {% endif %}
+                {% if show_tags_sidebar %}
+                <section>
+                    <h2>Tags</h2>
+                    <ul>
+                        {% for tag in all_tags() %}
+                            <li><a href="{{ tag.url }}">{{ tag.title }}</a> ({{ len(tag.tagged) }})
+                        {% endfor %}
+                    </ul>
+                </section>
+                {% endif %}
+            </aside>
+            <div class="cf"></div>
+            <footer>
+                {% block footer %}
+                    {% if id != 'index' %}
+                        <p><a href="{{ root }}">Home</a></p>
+                    {% endif %}
+                {% endblock %}
+            </footer>
+    </body>
+</html>

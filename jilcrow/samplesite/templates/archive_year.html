@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% if title %}
+        <h1>{{ title }}</h1>
+    {% endif %}
+
+    <ul>
+        {% for entry in entries %}
+            <li>
+                <a href="{{ entry.url }}">{{ entry.title }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}
+
+{% block footer %}
+    <p>
+        <a href="{{ root }}">Home</a>
+
+        {% for y in years %}
+            <span class="sep">|</span>
+
+            {% if year == y %}
+                <span class="selected">{{ y }}</span>
+            {% else %}
+                <a href="{{ get("archives/%s" % y).url }}">{{ y }}</a>
+            {% endif %}
+        {% endfor %}
+    </p>
+{% endblock %}

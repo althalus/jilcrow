@@ -1,0 +1,130 @@
+@import "_reset";
+@import "_grid";
+
+// Specify the number of columns and set column and gutter widths
+@columns: 12;
+@column-width: 60;
+@gutter-width: 15;
+
+// Remove the definition below for a pixel-based layout
+@total-width: 99.5%;
+
+@background: #222;
+@text: #eee;
+@link: #eb2;
+
+body {
+    background: @background / 1.5;
+    color: @text;
+    font: 1em/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    text-shadow: (@background - #181818) 0 1px 1px;
+}
+
+#page-heading {
+    .column(4);
+    .push(4);
+}
+#main-nav {
+    .column(4);
+    ul {
+        li {
+            float:right;
+            a {
+                display: block;
+            margin-left: 15px;
+            }
+        }
+    }
+}
+
+#body, #sidebar section {
+    background: @background;
+    border: 2px solid (@background * 1.5);
+    border-radius: 1.5em;
+}
+#sidebar section {
+    margin-bottom: 1em;
+}
+#body *, #sidebar section * {
+    margin-left: 0.7em;
+    margin-right: 0.7em;
+}
+.cf {
+    .clearfix();
+}
+
+#body {
+    .column(9);
+}
+#sidebar {
+    .column(3);
+}
+
+header, footer {
+    display: block;
+}
+header {
+    h1, p {
+        font-size: 1.5em;
+        margin-bottom: 1em;
+        text-align: center;
+        text-transform: uppercase;
+        a {
+            font-weight: normal;
+        }
+    }
+}
+footer {
+    border-top: 3px solid (@text / 4);
+    margin-top: 3em;
+    .sep { color: @text / 2; }
+}
+
+h1 {
+    font-size: 1.5em;
+}
+
+h2 {
+    font-size: 1.25em;  line-height: 1.2;
+    font-weight: bold;
+    margin: 1.8em 0 0.6em;
+}
+
+p, dl {
+    margin-bottom: 1.5em;
+}
+
+ul, ol {
+    margin: 0 0 1.5em 1.5em;
+}
+
+blockquote {
+    border-left: 0.25em solid (@background * 1.5);
+    margin: 0 1.5em 1.5em 0.5em;
+    padding-left: 0.75em;
+}
+
+p.time {
+    color: @text / 2;
+    font-size: 0.9em;
+    text-transform: uppercase;
+}
+
+a:link, a:visited {
+    color: @link;
+    font-weight: bold;
+    text-decoration: none;
+}
+a:hover {
+    color: @link + #333;
+}
+
+@media screen and (max-width: 720px) {
+    #body,
+    #sidebar,
+    #main-nav,
+    #main-heading {
+        .column(12);
+        margin-bottom: 1em;
+}
+}

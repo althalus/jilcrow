@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <h2>Recent Posts</h2>
+    <ul>
+        {% for page in get_pages(5) %}
+        <article>
+            <a href="{{ page.url }}">{{ page.title or 'Untitled' }}</a>
+            <time>({{ (page.posted or page.date).strftime('%Y-%b-%d') }})</time>
+            {% if page.summary %}<div class="summary">{{ page.summary }}{% endif %}
+        </article>
+        {% endfor %}
+    </ul>
+
+{% endblock %}
+
