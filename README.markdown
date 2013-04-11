@@ -27,7 +27,8 @@ Structure
             ... site templates ...
         deploy/
             ... where jilcrow puts the resulting files ...
-        site.yml
+        site.cfg
+            ... INI style config file for your jilcrow site ...
 
 Etc
 ---

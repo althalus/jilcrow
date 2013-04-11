@@ -142,7 +142,7 @@ class Jilcrow(dict):
         self['files_rename'] = self.normalize(cp.items("RENAME"))
         self['sidebars'] = self.normalize(cp.items("SIDEBARS"))
         self['menu'] = dict(cp.items("MENU"))
-        self['links'] = dict(cp.items("LINKS"))
+        self['links'] = cp.items("LINKS")
         self['content_extensions'] = [x.strip() for x in self['content_extensions'].split(",")]
         if 'tags' in self:
             self['tags'] = [x.strip() for x in self['tags'].split(",")]
